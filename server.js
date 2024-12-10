@@ -14,6 +14,14 @@ app.use(cors({
   origin: ['https://your-vercel-domain.vercel.app'], // Замените на домен вашего приложения на Vercel
   credentials: true
 }));
+const path = require('path');
+
+// Указываем папку с HTML-файлами
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
 
 // MongoDB Connection
 mongoose.set('strictQuery', true);
@@ -32,7 +40,9 @@ const User = mongoose.model('User', userSchema);
 const JWT_SECRET = process.env.JWT_SECRET;
 
 // Routes
-
+app.get('/', (req, res) => {
+  res.send('Сервер работает корректно!');
+});
 // Регистрация пользователя
 app.post('/register', async (req, res) => {
   const { username, password } = req.body;
